@@ -1,0 +1,2037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Threshold Decade · Technology, Biology & Sovereign Families</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A living briefing on the risks of advanced technology, synthetic biology, and institutional capture — and why every family on Earth must move toward food and water sovereignty." />
+
+  <style>
+    :root {
+      --bg: #050712;
+      --bg-alt: #060914;
+      --bg-soft: #0b1020;
+      --bg-card: #0f172a;
+      --bg-card-alt: #020617;
+      --fg: #f9fafb;
+      --fg-muted: #9ca3af;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56,189,248,0.15);
+      --danger: #f97373;
+      --danger-soft: rgba(248,113,113,0.1);
+      --ok: #4ade80;
+      --ok-soft: rgba(74,222,128,0.08);
+      --border-subtle: rgba(148,163,184,0.2);
+      --shadow-soft: 0 24px 60px rgba(15,23,42,0.9);
+      --radius-lg: 18px;
+      --radius-pill: 999px;
+      --nav-h: 64px;
+      --transition-fast: 200ms ease-out;
+      --transition-med: 340ms cubic-bezier(0.22, 0.61, 0.36, 1);
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #020617, #020617 38%, #000 100%);
+      color: var(--fg);
+      font-family: var(--font-sans);
+      scroll-behavior: smooth;
+    }
+
+    body.splash-active {
+      overflow: hidden;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* ===== Splash Screen ===== */
+
+    .splash {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at top, rgba(56,189,248,0.24), transparent 60%),
+        radial-gradient(circle at bottom, rgba(52,211,153,0.16), transparent 60%),
+        #020617;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 600ms ease-out, visibility 600ms ease-out;
+    }
+
+    .splash.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .splash-orbit {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(248,250,252,0.04), transparent 55%),
+        radial-gradient(circle at 80% 90%, rgba(148,163,184,0.08), transparent 55%);
+      opacity: 0.8;
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    .splash-core {
+      position: relative;
+      padding: 32px 28px 26px;
+      width: min(520px, 92vw);
+      background: radial-gradient(circle at top, #020617, #020617 58%, #000 100%);
+      border-radius: 28px;
+      border: 1px solid rgba(148,163,184,0.4);
+      box-shadow: 0 28px 80px rgba(15,23,42,0.95);
+      backdrop-filter: blur(16px);
+      transform-origin: center;
+      animation: splashFloat 7s ease-in-out infinite;
+      overflow: hidden;
+    }
+
+    .splash-pulse-ring {
+      position: absolute;
+      inset: -80px;
+      border-radius: inherit;
+      border: 1px solid rgba(56,189,248,0.12);
+      opacity: 0;
+      animation: ringPulse 10s ease-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes ringPulse {
+      0% { opacity: 0; transform: scale(0.7); }
+      15% { opacity: 0.8; transform: scale(1); }
+      60% { opacity: 0; transform: scale(1.1); }
+      100% { opacity: 0; transform: scale(1.1); }
+    }
+
+    @keyframes splashFloat {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-6px) scale(1.01); }
+    }
+
+    .splash-kicker {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 11px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(56,189,248,0.4);
+      margin-bottom: 14px;
+    }
+
+    .splash-kicker-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--ok);
+      box-shadow: 0 0 0 6px rgba(74,222,128,0.2);
+      margin-right: 7px;
+    }
+
+    .splash-title {
+      font-size: clamp(1.8rem, 4vw, 2.25rem);
+      line-height: 1.1;
+      margin: 0 0 10px;
+    }
+
+    .splash-sub {
+      font-size: 0.94rem;
+      line-height: 1.6;
+      color: var(--fg-muted);
+      margin-bottom: 16px;
+    }
+
+    .splash-bullets {
+      font-size: 0.8rem;
+      color: var(--fg-muted);
+      margin-bottom: 18px;
+      display: grid;
+      row-gap: 5px;
+    }
+
+    .splash-bullets span::before {
+      content: "• ";
+      color: var(--accent);
+    }
+
+    .splash-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 6px;
+    }
+
+    .btn-primary,
+    .btn-ghost {
+      border-radius: var(--radius-pill);
+      padding: 9px 18px;
+      font-size: 0.86rem;
+      border: 1px solid transparent;
+      cursor: pointer;
+      outline: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      transition: background var(--transition-med),
+                  color var(--transition-med),
+                  transform 120ms ease-out,
+                  box-shadow 160ms ease-out,
+                  border-color var(--transition-med);
+      font-weight: 500;
+    }
+
+    .btn-primary {
+      background: radial-gradient(circle at top, #38bdf8, #0ea5e9);
+      border-color: rgba(248,250,252,0.14);
+      color: #0b1120;
+      box-shadow: 0 12px 30px rgba(8,47,73,0.75);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 38px rgba(8,47,73,0.9);
+    }
+
+    .btn-ghost {
+      background: rgba(15,23,42,0.9);
+      color: var(--fg-muted);
+      border-color: rgba(148,163,184,0.5);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(15,23,42,1);
+      color: var(--fg);
+    }
+
+    .splash-meta {
+      margin-top: 10px;
+      font-size: 0.7rem;
+      color: var(--fg-muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      opacity: 0.8;
+    }
+
+    .splash-meta strong {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .splash-skip {
+      position: absolute;
+      inset-inline: 0;
+      bottom: 20px;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--fg-muted);
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity var(--transition-fast), transform 150ms ease-out;
+    }
+
+    .splash-skip:hover {
+      opacity: 1;
+      transform: translateY(-1px);
+    }
+
+    /* ===== Layout ===== */
+
+    .page {
+      min-height: 100vh;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(14px);
+      background: linear-gradient(to bottom, rgba(2,6,23,0.98), rgba(2,6,23,0.94), rgba(2,6,23,0.7), transparent);
+      border-bottom: 1px solid rgba(31,41,55,0.8);
+    }
+
+    .nav-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-right: auto;
+    }
+
+    .nav-logo-orbit {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 35% 20%, rgba(248,250,252,0.5), transparent 65%),
+                  radial-gradient(circle at bottom, rgba(56,189,248,0.3), transparent 60%);
+      box-shadow: 0 0 0 1px rgba(15,23,42,1), 0 0 18px rgba(56,189,248,0.7);
+    }
+
+    .nav-logo-orbit-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--ok);
+      box-shadow: 0 0 0 5px rgba(74,222,128,0.24);
+    }
+
+    .nav-title-main {
+      font-size: 0.86rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--fg-muted);
+    }
+
+    .nav-title-sub {
+      font-size: 0.7rem;
+      color: var(--fg-muted);
+      opacity: 0.7;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .nav-link {
+      font-size: 0.74rem;
+      padding: 5px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid transparent;
+      color: var(--fg-muted);
+      text-decoration: none;
+      background: transparent;
+      cursor: pointer;
+      transition: background var(--transition-fast),
+                  color var(--transition-fast),
+                  border-color var(--transition-fast),
+                  transform 120ms ease-out;
+    }
+
+    .nav-link:hover {
+      color: var(--fg);
+      background: rgba(15,23,42,0.9);
+      border-color: rgba(148,163,184,0.6);
+      transform: translateY(-1px);
+    }
+
+    .nav-link.active {
+      color: #0b1120;
+      background: radial-gradient(circle at top, var(--accent), #0ea5e9);
+      border-color: rgba(248,250,252,0.18);
+      box-shadow: 0 10px 22px rgba(8,47,73,0.8);
+    }
+
+    .nav-tools {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-pill {
+      font-size: 0.7rem;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148,163,184,0.7);
+      background: rgba(15,23,42,0.95);
+      color: var(--fg-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-pill-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--danger);
+      box-shadow: 0 0 0 4px rgba(248,113,113,0.24);
+    }
+
+    .nav-search {
+      position: relative;
+    }
+
+    .nav-search input {
+      font-size: 0.76rem;
+      padding: 5px 26px 5px 22px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148,163,184,0.7);
+      background: rgba(15,23,42,0.96);
+      color: var(--fg);
+      outline: none;
+      width: 162px;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast),
+                  background var(--transition-fast), width 160ms ease-out;
+    }
+
+    .nav-search input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(56,189,248,0.4);
+      background: rgba(15,23,42,1);
+      width: 200px;
+    }
+
+    .nav-search-icon {
+      position: absolute;
+      left: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.72rem;
+      color: var(--fg-muted);
+    }
+
+    .nav-search-clear {
+      position: absolute;
+      right: 7px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.7rem;
+      color: var(--fg-muted);
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 120ms ease-out;
+    }
+
+    .nav-search-clear.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* ===== Hero ===== */
+
+    .hero {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 26px 16px 12px;
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.4fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 880px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .hero-main {
+      position: relative;
+      padding: 18px 18px 18px;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at top left, rgba(56,189,248,0.20), transparent 58%),
+        radial-gradient(circle at bottom right, rgba(52,211,153,0.18), transparent 55%),
+        radial-gradient(circle at center, #020617, #020617 58%, #000 100%);
+      border: 1px solid rgba(148,163,184,0.65);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+
+    .hero-main-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+      align-items: center;
+    }
+
+    .hero-badge {
+      font-size: 0.72rem;
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(15,23,42,0.9);
+      background: rgba(15,23,42,0.9);
+      color: var(--fg-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-badge strong {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .hero-title {
+      font-size: clamp(1.8rem, 3vw, 2.25rem);
+      line-height: 1.15;
+      margin: 4px 0 8px;
+    }
+
+    .hero-title span {
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      font-size: 0.94rem;
+      color: var(--fg-muted);
+      line-height: 1.7;
+      margin-bottom: 14px;
+    }
+
+    .hero-quick-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    @media (max-width: 600px) {
+      .hero-quick-stats {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+      }
+    }
+
+    .hero-stat {
+      padding: 9px 10px;
+      border-radius: 14px;
+      background: rgba(15,23,42,0.95);
+      border: 1px solid rgba(148,163,184,0.8);
+      font-size: 0.76rem;
+      display: grid;
+      gap: 3px;
+    }
+
+    .hero-stat-label {
+      color: var(--fg-muted);
+    }
+
+    .hero-stat-value {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .hero-stat-tag {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 2px;
+    }
+
+    .hero-actions-note {
+      font-size: 0.76rem;
+      color: var(--fg-muted);
+    }
+
+    .hero-orbit {
+      position: absolute;
+      inset: -40%;
+      opacity: 0.6;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(248,250,252,0.14), transparent 65%),
+        radial-gradient(circle at 80% 90%, rgba(56,189,248,0.18), transparent 55%),
+        radial-gradient(circle at 30% 80%, rgba(52,211,153,0.24), transparent 60%);
+      mix-blend-mode: screen;
+      filter: blur(3px);
+      animation: orbitDrift 24s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    @keyframes orbitDrift {
+      0% { transform: translate3d(0,0,0) scale(1); }
+      50% { transform: translate3d(-3%, -2%, 0) scale(1.03); }
+      100% { transform: translate3d(3%, 2%, 0) scale(1.02); }
+    }
+
+    .hero-side {
+      display: grid;
+      gap: 10px;
+    }
+
+    .hero-card {
+      padding: 12px 12px;
+      border-radius: 16px;
+      background: radial-gradient(circle at top, rgba(15,23,42,0.9), #020617 80%);
+      border: 1px solid rgba(31,41,55,0.9);
+      font-size: 0.8rem;
+      color: var(--fg-muted);
+      display: grid;
+      gap: 6px;
+    }
+
+    .hero-card h3 {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--fg);
+    }
+
+    .hero-card ul {
+      margin: 4px 0 0 16px;
+      padding: 0;
+    }
+
+    .hero-card li {
+      margin-bottom: 4px;
+    }
+
+    .hero-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 2px;
+    }
+
+    .chip {
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.6);
+      font-size: 0.68rem;
+      color: var(--fg-muted);
+    }
+
+    /* ===== Sections / Content ===== */
+
+    .content {
+      max-width: 1120px;
+      margin: 4px auto 60px;
+      padding: 0 16px 40px;
+    }
+
+    section {
+      margin-top: 24px;
+      padding: 16px 16px 18px;
+      border-radius: 20px;
+      border: 1px solid var(--border-subtle);
+      background:
+        radial-gradient(circle at top, rgba(15,23,42,0.9), #020617 65%);
+      box-shadow: 0 18px 40px rgba(15,23,42,0.9);
+      position: relative;
+      overflow: hidden;
+    }
+
+    section.alt {
+      background: radial-gradient(circle at top, #020617, #020617 55%, #000 100%);
+    }
+
+    section::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(56,189,248,0.12), transparent 50%),
+        radial-gradient(circle at 90% 100%, rgba(52,211,153,0.08), transparent 50%);
+      opacity: 0.6;
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    .section-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: baseline;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: 1.05rem;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--fg-muted);
+    }
+
+    .section-tag {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      padding: 3px 9px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148,163,184,0.7);
+      color: var(--fg-muted);
+      background: rgba(8,47,73,0.8);
+    }
+
+    .section-body {
+      font-size: 0.89rem;
+      color: var(--fg-muted);
+      line-height: 1.7;
+    }
+
+    .section-body p {
+      margin: 0 0 8px;
+    }
+
+    .section-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .inline-highlight {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .inline-danger {
+      color: var(--danger);
+      font-weight: 500;
+    }
+
+    .inline-ok {
+      color: var(--ok);
+      font-weight: 500;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.2fr);
+      gap: 18px;
+      margin-top: 6px;
+    }
+
+    @media (max-width: 880px) {
+      .two-col {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .callout {
+      padding: 9px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(148,163,184,0.75);
+      background: rgba(15,23,42,0.98);
+      margin: 4px 0 8px;
+      font-size: 0.8rem;
+    }
+
+    .callout.danger {
+      border-color: rgba(248,113,113,0.9);
+      background: var(--danger-soft);
+    }
+
+    .callout.ok {
+      border-color: rgba(74,222,128,0.9);
+      background: var(--ok-soft);
+    }
+
+    .callout-label {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--fg-muted);
+      margin-bottom: 3px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .pill {
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148,163,184,0.7);
+      background: rgba(15,23,42,0.98);
+      color: var(--fg-muted);
+    }
+
+    .pill.danger {
+      border-color: rgba(248,113,113,0.8);
+      color: var(--danger);
+    }
+
+    .pill.ok {
+      border-color: rgba(74,222,128,0.8);
+      color: var(--ok);
+    }
+
+    /* ===== Accordions ===== */
+
+    .accordion {
+      border-radius: 14px;
+      border: 1px solid rgba(148,163,184,0.7);
+      overflow: hidden;
+      margin: 10px 0 0;
+      background: rgba(15,23,42,0.92);
+    }
+
+    .accordion-item + .accordion-item {
+      border-top: 1px solid rgba(30,64,175,0.8);
+    }
+
+    .accordion-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 9px 11px;
+      cursor: pointer;
+      font-size: 0.84rem;
+      color: var(--fg);
+    }
+
+    .accordion-header span {
+      font-weight: 500;
+    }
+
+    .accordion-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.8);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      color: var(--fg-muted);
+      transition: transform 180ms ease-out, background 180ms ease-out;
+    }
+
+    .accordion-header.open .accordion-icon {
+      transform: rotate(90deg);
+      background: rgba(15,23,42,0.96);
+    }
+
+    .accordion-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 260ms ease-out;
+      padding-inline: 11px;
+    }
+
+    .accordion-body-inner {
+      padding: 4px 0 9px;
+      font-size: 0.8rem;
+      color: var(--fg-muted);
+      line-height: 1.6;
+    }
+
+    .accordion-body-inner ul {
+      margin: 4px 0 0 17px;
+      padding: 0;
+    }
+
+    .accordion-body-inner li {
+      margin-bottom: 4px;
+    }
+
+    /* ===== Sovereignty Planner ===== */
+
+    .planner-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 800px) {
+      .planner-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .planner-card {
+      border-radius: 16px;
+      border: 1px solid rgba(148,163,184,0.7);
+      padding: 10px 11px;
+      background: rgba(15,23,42,0.96);
+      font-size: 0.8rem;
+    }
+
+    .planner-card h4 {
+      margin: 0 0 4px;
+      font-size: 0.9rem;
+      color: var(--fg);
+    }
+
+    .planner-steps {
+      margin: 5px 0 0;
+      padding-left: 18px;
+    }
+
+    .planner-steps li {
+      margin-bottom: 4px;
+    }
+
+    .checklist {
+      margin: 4px 0 0;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 4px;
+    }
+
+    .checkmark {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      border: 1px solid rgba(148,163,184,0.8);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .checkmark.done {
+      background: rgba(56,189,248,0.14);
+      border-color: rgba(56,189,248,0.9);
+    }
+
+    /* ===== Search Highlight ===== */
+
+    .search-hit {
+      background: rgba(56,189,248,0.18);
+      border-radius: 6px;
+      box-shadow: 0 0 0 1px rgba(56,189,248,0.4);
+    }
+
+    /* ===== Footer ===== */
+
+    footer {
+      border-top: 1px solid rgba(31,41,55,0.9);
+      padding: 16px 16px 22px;
+      background: #020617;
+      font-size: 0.76rem;
+      color: var(--fg-muted);
+    }
+
+    .footer-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: grid;
+      gap: 10px;
+    }
+
+    .footer-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-note {
+      max-width: 700px;
+    }
+
+    .footer-note strong {
+      color: var(--accent);
+    }
+
+    .footer-tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .footer-tag {
+      border-radius: var(--radius-pill);
+      padding: 3px 8px;
+      border: 1px solid rgba(148,163,184,0.7);
+      background: rgba(15,23,42,0.98);
+    }
+
+    /* ===== Noscript ===== */
+
+    noscript {
+      display: block;
+      background: #450a0a;
+      color: #fee2e2;
+      padding: 10px 14px;
+      font-size: 0.78rem;
+      border-bottom: 1px solid #7f1d1d;
+      text-align: center;
+    }
+
+    /* ===== Print ===== */
+
+    @media print {
+      .splash,
+      .nav,
+      .hero-actions button,
+      .nav-search,
+      .nav-pill {
+        display: none !important;
+      }
+
+      body {
+        background: #ffffff;
+        color: #000000;
+      }
+
+      section {
+        box-shadow: none;
+        background: #ffffff;
+        border-color: #e5e7eb;
+      }
+
+      a {
+        color: #111827;
+        text-decoration: underline;
+      }
+    }
+  </style>
+</head>
+<body class="splash-active">
+  <noscript>
+    This page uses small, client-side scripts for navigation and search. Everything is readable without JavaScript, but interactive helpers will be disabled.
+  </noscript>
+
+  <!-- ================= SPLASH ================= -->
+
+  <div class="splash" id="splash">
+    <div class="splash-orbit" aria-hidden="true"></div>
+    <div class="splash-core" role="dialog" aria-labelledby="splash-title" aria-describedby="splash-desc">
+      <div class="splash-pulse-ring" aria-hidden="true"></div>
+      <div class="splash-kicker">
+        <span class="splash-kicker-dot"></span>
+        Planetary Risk · Family Sovereignty Brief
+      </div>
+      <h1 class="splash-title" id="splash-title">
+        We are in a <span style="color: var(--accent);">threshold decade</span>.
+      </h1>
+      <p class="splash-sub" id="splash-desc">
+        Advanced AI and biotech are racing ahead. Institutions are strained, sometimes captured. Meanwhile nearly a billion people are hungry and
+        <span class="inline-danger">two billion</span> still lack safe drinking water. This page is a calm, practical map: what is happening, why it matters, and how every family can move toward
+        <span class="inline-ok">food and water sovereignty</span>.
+      </p>
+      <div class="splash-bullets">
+        <span>Understand the overlapping risks from technology, biology & governance.</span>
+        <span>See how hunger and water scarcity are spreading — and where progress is real.</span>
+        <span>Use a simple sovereignty checklist to start securing your own household.</span>
+      </div>
+      <div class="splash-cta-row">
+        <button class="btn-primary" id="splash-begin">
+          Enter the briefing
+          <span aria-hidden="true">↳</span>
+        </button>
+        <button class="btn-ghost" id="splash-skip-once">
+          Skip intro this time
+        </button>
+      </div>
+      <div class="splash-meta">
+        <div>
+          Status: <strong>Non-commercial public knowledge</strong><br />
+          Lens: Precaution · Justice · Regeneration
+        </div>
+        <div style="text-align:right;">
+          Recommended: Read with family / friends.<br />
+          Time: ~15–20 minutes.
+        </div>
+      </div>
+      <div class="splash-skip" id="splash-always">
+        Always skip this intro on this device ⟶
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MAIN PAGE ================= -->
+
+  <div class="page" id="page-root">
+    <header class="nav">
+      <div class="nav-inner">
+        <div class="nav-logo">
+          <div class="nav-logo-orbit">
+            <div class="nav-logo-orbit-dot"></div>
+          </div>
+          <div>
+            <div class="nav-title-main">Threshold Decade</div>
+            <div class="nav-title-sub">Technology · Biology · Sovereign Families</div>
+          </div>
+        </div>
+
+        <nav class="nav-links" aria-label="Section navigation">
+          <button class="nav-link active" data-target="sec-overview">Overview</button>
+          <button class="nav-link" data-target="sec-tech">Technology risks</button>
+          <button class="nav-link" data-target="sec-bio">Biology & biosecurity</button>
+          <button class="nav-link" data-target="sec-institutions">Institutions</button>
+          <button class="nav-link" data-target="sec-food">Food</button>
+          <button class="nav-link" data-target="sec-water">Water</button>
+          <button class="nav-link" data-target="sec-household">Household sovereignty</button>
+          <button class="nav-link" data-target="sec-progress">Signs of progress</button>
+        </nav>
+
+        <div class="nav-tools">
+          <div class="nav-pill" title="Snapshot of global pressure on basic needs">
+            <span class="nav-pill-dot"></span>
+            <span>295M+ facing acute hunger · 2B+ without safe water</span>
+          </div>
+          <div class="nav-search" aria-label="Search in page">
+            <span class="nav-search-icon">🔍</span>
+            <input type="search" id="search-box" placeholder="Search this briefing…" />
+            <span class="nav-search-clear" id="search-clear">✕</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===== HERO ===== -->
+
+    <main>
+      <section id="sec-overview" aria-label="Overview">
+        <div class="section-inner">
+          <div class="hero">
+            <div class="hero-main">
+              <div class="hero-orbit" aria-hidden="true"></div>
+              <div class="hero-main-inner">
+                <div class="hero-badge-row">
+                  <div class="hero-badge">
+                    <span style="width:7px;height:7px;border-radius:999px;background:var(--danger);box-shadow:0 0 0 6px rgba(248,113,113,0.23);"></span>
+                    <strong>Context:</strong> Risk is global, but so is agency.
+                  </div>
+                  <div class="hero-badge">
+                    <strong>Goal:</strong> Every family on Earth can eat, drink and adapt — even when systems wobble.
+                  </div>
+                </div>
+                <h2 class="hero-title">
+                  We live in a decade where <span>code, cells and climate</span> interact faster than our institutions.
+                </h2>
+                <p class="hero-sub">
+                  Artificial intelligence is accelerating decision-making and concentration of power. Synthetic biology is lowering the barrier to editing life. Many
+                  institutions are captured by short-term incentives or geopolitical pressure. At the same time, hundreds of millions are hungry and
+                  <span class="inline-danger">over two billion people lack safe drinking water</span>.:contentReference[oaicite:0]{index=0}
+                  This page is not here to scare you — it is here to tell you, calmly and concretely, what is at stake and what you can do.
+                </p>
+                <div class="hero-quick-stats" aria-label="Key risk snapshots">
+                  <div class="hero-stat">
+                    <div class="hero-stat-label">Acute hunger (2024)</div>
+                    <div class="hero-stat-value inline-danger">295M+</div>
+                    <div class="hero-stat-tag">Crisis or worse</div>
+                  </div>
+                  <div class="hero-stat">
+                    <div class="hero-stat-label">Safe drinking water</div>
+                    <div class="hero-stat-value inline-danger">2.0–2.2B</div>
+                    <div class="hero-stat-tag">No safe access</div>
+                  </div>
+                  <div class="hero-stat">
+                    <div class="hero-stat-label">AI & bio tools</div>
+                    <div class="hero-stat-value inline-highlight">Exploding</div>
+                    <div class="hero-stat-tag">Governance lag</div>
+                  </div>
+                </div>
+                <div class="hero-actions">
+                  <button class="btn-primary" data-target="sec-household">
+                    Jump to household sovereignty checklist
+                  </button>
+                  <button class="btn-ghost" data-target="sec-tech">
+                    Start with systemic risks
+                  </button>
+                  <div class="hero-actions-note">
+                    You do <strong>not</strong> need to be a scientist or policymaker. Families are a legitimate level of governance.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <aside class="hero-side" aria-label="Quick context">
+              <div class="hero-card">
+                <h3>Why talk about “sovereignty” at the household level?</h3>
+                <p>
+                  Sovereignty here is not about flags or borders. It means this: <strong>your family can eat, drink and think clearly even if distant systems wobble</strong>.
+                  Not in isolation, but woven into community.
+                </p>
+                <ul>
+                  <li>Enough calories and nutrients without fragile trade chains.</li>
+                  <li>Water that is physically accessible and actually safe.</li>
+                  <li>Information you can verify, not just scroll.</li>
+                </ul>
+                <div class="hero-chip-row">
+                  <span class="chip">Food & water as non-negotiable baselines</span>
+                  <span class="chip">Psychological sovereignty & info hygiene</span>
+                </div>
+              </div>
+              <div class="hero-card">
+                <h3>Three overlapping danger zones</h3>
+                <ul>
+                  <li><strong>Technology:</strong> AI and digital systems concentrating power, manipulating attention, and automating harm at scale.</li>
+                  <li><strong>Biology:</strong> Powerful tools for editing genomes and designing pathogens, with dual-use (good + bad) potential.:contentReference[oaicite:1]{index=1}</li>
+                  <li><strong>Institutions:</strong> Governments and companies captured by short-term profit, geopolitical games or corruption, slow to protect the vulnerable.:contentReference[oaicite:2]{index=2}</li>
+                </ul>
+                <p>
+                  These risks amplify each other. The antidote is <strong>distributed resilience</strong>: many households, communities and regions with the skills and infrastructure
+                  to absorb shocks together.
+                </p>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== TECH RISKS ===== -->
+
+      <section id="sec-tech" class="alt" aria-label="Technology risks">
+        <div class="section-inner">
+          <div class="section-header">
+            <h2 class="section-title">
+              <span class="section-title-label">01 · Technology</span>
+              The upside of AI is enormous — so is the downside of concentrated control.
+            </h2>
+            <div class="section-tag">Digital power & AI</div>
+          </div>
+          <div class="section-body">
+            <div class="two-col">
+              <div>
+                <p>
+                  Artificial intelligence is no longer a lab curiosity. It writes code, drafts policy, generates media, and increasingly mediates what we see and believe.
+                  A handful of major companies and states are pouring <strong>hundreds of billions of dollars</strong> into this race.:contentReference[oaicite:3]{index=3}
+                  Reports from independent groups and the UN warn that, without strong guardrails, AI could:
+                </p>
+                <div class="callout danger">
+                  <div class="callout-label">Systemic digital risks</div>
+                  <ul style="margin:4px 0 0 16px;">
+                    <li>Deepen inequality by giving rich countries and firms huge productivity gains while others lack infrastructure.:contentReference[oaicite:4]{index=4}</li>
+                    <li>Concentrate power over information flows, elections and public opinion in a few platforms.:contentReference[oaicite:5]{index=5}</li>
+                    <li>Automate surveillance, targeted repression and information warfare.</li>
+                    <li>Accelerate automation of jobs without automatic replacement of secure, dignified work.</li>
+                  </ul>
+                </div>
+                <p>
+                  New assessments of “frontier” AI labs show many are <span class="inline-danger">not yet meeting serious safety standards</span> for controlling powerful systems they are actively building.:contentReference[oaicite:6]{index=6}
+                </p>
+                <div class="accordion" data-accordion="tech">
+                  <div class="accordion-item">
+                    <div class="accordion-header">
+                      <span>Hidden fragilities in our everyday digital life</span>
+                      <div class="accordion-icon">›</div>
+                    </div>
+                    <div class="accordion-body">
+                      <div class="accordion-body-inner">
+                        <p>
+                          Most of us now rely on a few huge providers for everything: messages, maps, banking, news, work, and school. This creates “single points of failure”:
+                        </p>
+                        <ul>
+                          <li>A major cloud provider outage can disrupt hospitals, logistics, and food deliveries.</li>
+                          <li>Algorithm changes can quietly suffocate small businesses and independent media.</li>
+                          <li>Data breaches leak the intimate details of millions at once.</li>
+                        </ul>
+                        <p>
+                          None of this is inevitable. But it means <strong>digital monoculture</strong> has become a real risk, just like planting a single crop across a whole continent.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="accordion-item">
+                    <div class="accordion-header">
+                      <span>What responsible AI could look like</span>
+                      <div class="accordion-icon">›</div>
+                    </div>
+                    <div class="accordion-body">
+                      <div class="accordion-body-inner">
+                        <p>
+                          Responsible AI is more than “don’t be evil” slogans. It needs:
+                        </p>
+                        <ul>
+                          <li>Independent safety evaluations and stress-tests before deployment.</li>
+                          <li>Democratic oversight and public input, especially where public services are affected.</li>
+                          <li>Strong rules against exploitative data practices and hidden surveillance.</li>
+                          <li>Investment in AI that serves public goods: climate resilience, health, conflict prevention, civic education.</li>
+                        </ul>
+                        <p>
+                          Families can support this by backing movements and policies that demand <strong>transparency, safety and public benefit</strong>, not just profit.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <p>
+                  For everyday people, the danger is not only “killer robots” or sci-fi scenarios. It is also slow, invisible drift:
+                </p>
+                <ul style="margin-left:16px;">
+                  <li>Children absorbing a feed engineered to maximize engagement, not wellbeing.</li>
+                  <li>Opinions shaped more by algorithmically amplified outrage than by lived experience.</li>
+                  <li>Critical infrastructure quietly dependent on software and vendors nobody audits.</li>
+                </ul>
+                <div class="callout ok">
+                  <div class="callout-label">Household-level digital resilience</div>
+                  <p style="margin:4px 0 4px;">
+                    Steps you can consider:
+                  </p>
+                  <div class="pill-row">
+                    <span class="pill">Backups of key documents offline and in multiple locations.</span>
+                    <span class="pill">Alternative communication channels for outages (SMS trees, radio, local groups).</span>
+                    <span class="pill">Teach children how feeds work, not just how to use them.</span>
+                    <span class="pill">Support open-source tools and local tech skill-sharing where possible.</span>
+                  </div>
+                </div>
+                <p>
+                  Technology is not the enemy. The danger is <strong>unaccountable power and dependence</strong>. The antidote is a blend of regulation, collective action —
+                  and families who treat digital tools as tools, not masters.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== BIOLOGY & BIOSECURITY ===== -->
+
+      <section id="sec-bio" aria-label="Biology and biosecurity">
+        <div class="section-inner">
+          <div class="section-header">
+            <h2 class="section-title">
+              <span class="section-title-label">02 · Biology</span>
+              We are learning to edit life faster than we are learning to handle responsibility.
+            </h2>
+            <div class="section-tag">Biotech & AIxBio</div>
+          </div>
+          <div class="section-body">
+            <div class="two-col">
+              <div>
+                <p>
+                  Synthetic biology, CRISPR gene editing and AI-assisted biological design are transforming medicine, agriculture and manufacturing. They can cure diseases,
+                  engineer crops for resilience, and develop new materials. But the same tools can be misused to create more dangerous pathogens, disrupt ecosystems, or
+                  entrench corporate control over seeds and medicines.:contentReference[oaicite:7]{index=7}
+                </p>
+                <div class="callout danger">
+                  <div class="callout-label">Dual-use: cure and harm in the same toolkit</div>
+                  <ul style="margin:4px 0 0 16px;">
+                    <li>AI can help design proteins and sequences — great for vaccines, but also potentially for harmful organisms.:contentReference[oaicite:8]{index=8}</li>
+                    <li>Gene drives and engineered species can restore ecosystems — or irreversibly alter them.</li>
+                    <li>Centralized control of seeds and livestock genetics can squeeze out local varieties that communities rely on.</li>
+                  </ul>
+                </div>
+                <p>
+                  Global bodies like the WHO now issue guidance on governing dual-use research and managing biorisks, but enforcement is uneven and often lags behind the lab
+                  work.:contentReference[oaicite:9]{index=9}
+                </p>
+              </div>
+              <div>
+                <p>
+                  For families, the biological risk story may seem distant — happening in high-tech labs. Yet it intersects with daily life:
+                </p>
+                <ul style="margin-left:16px;">
+                  <li>How resilient local crops and seed systems are to new pests and changing climate.</li>
+                  <li>Whether medicines and vaccines are accessible, affordable and trusted.</li>
+                  <li>How well public health systems can respond to outbreaks, especially in regions already facing hunger or conflict.</li>
+                </ul>
+                <div class="callout ok">
+                  <div class="callout-label">Household-level bio resilience</div>
+                  <p style="margin:4px 0 4px;">
+                    Some practical moves:
+                  </p>
+                  <div class="pill-row">
+                    <span class="pill">Support seed libraries and preservation of local crop varieties.</span>
+                    <span class="pill">Learn basic hygiene and outbreak response practices (ventilation, masking, isolation when ill).</span>
+                    <span class="pill">Advocate for transparent, community-involving health communication.</span>
+                    <span class="pill">Stay informed via trusted public health sources instead of viral rumors.</span>
+                  </div>
+                </div>
+                <p>
+                  The long-term goal is a world where biotechnology is governed like a shared, sacred toolkit: powerful, carefully handled, and primarily used to heal —
+                  never to dominate or extract.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== INSTITUTIONS ===== -->
+
+      <section id="sec-institutions" class="alt" aria-label="Institutions and capture">
+        <div class="section-inner">
+          <div class="section-header">
+            <h2 class="section-title">
+              <span class="section-title-label">03 · Institutions</span>
+              Some of the systems meant to protect us are exhausted, captured or under-funded — yet many are also reforming from within.
+            </h2>
+            <div class="section-tag">Governance & capture</div>
+          </div>
+          <div class="section-body">
+            <div class="two-col">
+              <div>
+                <p>
+                  Institutions — governments, regulators, courts, universities, international agencies — are supposed to translate collective values into rules, infrastructure and protections.
+                  But decades of under-funding, lobbying, corruption and geopolitical tension have left many <strong>overwhelmed or captured</strong>.
+                </p>
+                <div class="callout danger">
+                  <div class="callout-label">Patterns of institutional compromise</div>
+                  <ul style="margin:4px 0 0 16px;">
+                    <li>Regulators relying on companies they regulate for data and expertise.</li>
+                    <li>Public agencies pressured to prioritize short-term economic gains over long-term ecological and social stability.</li>
+                    <li>Privatization of critical functions (water, energy, digital infrastructure) without robust public oversight.:contentReference[oaicite:10]{index=10}</li>
+                    <li>International bodies asked to manage global crises without the funding or authority to match.</li>
+                  </ul>
+                </div>
+                <p>
+                  This matters for technology, biology, food and water because these arenas cross borders and corporate boundaries. When oversight is weak, risks leak everywhere.
+                </p>
+              </div>
+              <div>
+                <p>
+                  Yet the story is not only decay. Around the world, you can see:
+                </p>
+                <ul style="margin-left:16px;">
+                  <li>New global frameworks for AI governance and safety emerging at the UN and regional levels.:contentReference[oaicite:11]{index=11}</li>
+                  <li>Updated biosecurity guidelines and codes of conduct for scientists.:contentReference[oaicite:12]{index=12}</li>
+                  <li>Cities and regions building climate-resilient food and water systems with community involvement.</li>
+                  <li>Civil society networks tracking corruption, environmental crimes and digital rights abuses.</li>
+                </ul>
+                <div class="callout ok">
+                  <div class="callout-label">How ordinary families fit into big systems</div>
+                  <p style="margin:4px 0 4px;">
+                    Families and communities are not passive “end users.” They:
+                  </p>
+                  <div class="pill-row">
+                    <span class="pill ok">Vote, organize and hold officials to account.</span>
+                    <span class="pill ok">Form cooperatives for food, water, housing and energy.</span>
+                    <span class="pill ok">Create local monitoring networks that feed into global datasets.</span>
+                    <span class="pill ok">Refuse narratives that treat sacrifice of the vulnerable as “necessary.”</span>
+                  </div>
+                </div>
+                <p>
+                  Institutional reform is slow, but it accelerates when <strong>many small, stubborn groups</strong> move in the same direction: transparency, zero-corruption,
+                  ecological sanity, and protection of basic needs.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== FOOD ===== -->
+
+      <section id="sec-food" aria-label="Global food insecurity and household food sovereignty">
+        <div class="section-inner">
+          <div class="section-header">
+            <h2 class="section-title">
+              <span class="section-title-label">04 · Food</span>
+              Hunger is rising in fragile regions — but food sovereignty can grow from balconies to bioregions.
+            </h2>
+            <div class="section-tag">Food insecurity & sovereignty</div>
+          </div>
+          <div class="section-body">
+            <div class="two-col">
+              <div>
+                <p>
+                  In 2024, <strong>about 673 million people</strong> — 8.3% of the global population — were estimated to face hunger. Hunger has fallen slightly worldwide,
+                  but it is <span class="inline-danger">rising in much of Africa and western Asia</span>.:contentReference[oaicite:13]{index=13}
+                  In the most fragile regions, more than <strong>295 million people</strong> were in crisis or worse levels of acute food insecurity.:contentReference[oaicite:14]{index=14}
+                </p>
+                <p>
+                  Causes stack on top of each other: conflict, climate extremes, economic shocks, and the high cost of imported food and fertilizer. In many countries, local
+                  farmers are squeezed between debt, changing weather and cheap imports.
+                </p>
+                <div class="callout danger">
+                  <div class="callout-label">Why “just-in-time” food systems are brittle</div>
+                  <ul style="margin:4px 0 0 16px;">
+                    <li>Long supply chains depend on stable fuel, ports and political relations.</li>
+                    <li>Monoculture farming is vulnerable to pests, disease and extreme weather.</li>
+                    <li>Speculation and corporate consolidation can push prices up even when there is enough food globally.</li>
+                  </ul>
+                </div>
+                <p>
+                  Even wealthy countries are not immune. For instance, recent data show that about <strong>10 million people in Canada</strong> — including 2.5 million children —
+                  live in food-insecure households.:contentReference[oaicite:15]{index=15} Food insecurity may show up as skipping meals, relying on cheap, low-nutrition calories or
+                  simply constant anxiety about running out.
+                </p>
+              </div>
+              <div>
+                <p>
+                  Food sovereignty is the right of people to <strong>define their own food systems</strong> — focusing on local, culturally appropriate, sustainable production
+                  and fair access. It is not only about calories; it is about dignity and control.
+                </p>
+                <div class="planner-grid">
+                  <div class="planner-card">
+                    <h4>Household food sovereignty steps</h4>
+                    <ol class="planner-steps">
+                      <li><strong>Map your current dependence.</strong> Where does your food actually come from? How far does it travel? How many days of food are in your home?</li>
+                      <li><strong>Start a resilience reserve.</strong> Build a rotating store of staple foods your household actually eats (grains, beans, oils, preserved
+                        vegetables, etc.), aiming for at least 7–30 days as circumstances allow.</li>
+                      <li><strong>Grow something.</strong> Balcony herbs, container veggies, rooftop gardens, community plots — any photosynthesis close to home matters.</li>
+                      <li><strong>Support local producers.</strong> Farmers’ markets, CSAs, cooperatives, mutual-aid kitchens, traditional seed keepers.</li>
+                      <li><strong>Protect diversity.</strong> Save and share seeds where this is legally and practically possible.</li>
+                    </ol>
+                  </div>
+                  <div class="planner-card">
+                    <h4>Community-level actions</h4>
+                    <ul class="checklist">
+                      <li>
+                        <span class="checkmark">□</span>
+                        Community gardens and food forests on public or faith-owned land.
+                      </li>
+                      <li>
+                        <span class="checkmark">□</span>
+                        School and workplace programs that connect meals to local farms.
+                      </li>
+                      <li>
+                        <span class="checkmark">□</span>
+                        Neighbourhood bulk-buying clubs to reduce costs and waste.
+                      </li>
+                      <li>
+                        <span class="checkmark">□</span>
+                        Local emergency food plans that integrate with disaster response.
+                      </li>
+                      <li>
+                        <span class="checkmark">□</span>
+                        Campaigns to protect farmland from speculative development.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <p>
+                  The goal is not for every household to become a farm. The goal is to <strong>shorten and diversify the paths</strong> between soil and plate, so that
+                  shocks in one place do not immediately translate into hunger everywhere.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== WATER ===== -->
+
+      <section id="sec-water" class="alt" aria-label="Global water crisis and household water sovereignty">
+        <div class="section-inner">
+          <div class="section-header">
+            <h2 class="section-title">
+              <span class="section-title-label">05 · Water</span>
+              Two billion people without safe drinking water — but every region can build its own hydrological safety net.
+            </h2>
+            <div class="section-tag">Water crisis & resilience</div>
+          </div>
+          <div class="section-body">
+            <div class="two-col">
+              <div>
+                <p>
+                  Globally, around <strong>2 billion people</strong> lack safe drinking water at home, and about <strong>3.5–3.6 billion</strong> lack safely managed sanitation.:contentReference[oaicite:16]{index=16}
+                  Water stress is increasing as populations grow, groundwater is depleted, pollution spreads, and climate change alters rainfall and glaciers.
+                </p>
+                <div class="callout danger">
+                  <div class="callout-label">What water insecurity feels like</div>
+                  <p style="margin:4px 0 4px;">
+                    For families, lack of safe water means:
+                  </p>
+                  <ul style="margin:0 0 0 16px;">
+                    <li>Hours each day spent walking to distant sources, often by women and children.</li>
+                    <li>Illness from contaminated sources — diarrheal diseases, parasites, heavy metals.</li>
+                    <li>Choosing between buying water and buying food or school supplies.</li>
+                    <li>In some places, increased violence and exploitation along water routes.</li>
+                  </ul>
+                </div>
+                <p>
+                  Urban areas face a different but related risk: complex systems of pipes, pumps and treatment plants that can be disrupted by power cuts, cyberattacks,
+                  droughts or floods. Rural communities may suffer from contamination of wells and springs by industry, mining or poor sanitation.
+                </p>
+              </div>
+              <div>
+                <p>
+                  Water sovereignty means that communities can <strong>reliably access, protect and govern their own water sources</strong> in harmony with ecosystems and
+                  downstream neighbours.
+                </p>
+                <div class="planner-grid">
+                  <div class="planner-card">
+                    <h4>Household water resilience checklist</h4>
+                    <ul class="checklist">
+                      <li>
+                        <span class="checkmark">□</span>
+                        Do you know where your water comes from (aquifer, river, reservoir, rainfall)?
+                      </li>
+                      <li>
+                        <span class="checkmark">□</span>
+                        Do you have at least a few days of drinking water stored safely?
+                      </li>
+                      <li>
+                        <span class="checkmark">□</span>
+                        Do you have a backup method to make water safer (boiling, filters, chemical treatment) in an emergency?
+                      </li>
+                      <li>
+                        <span class="checkmark">□</span>
+                        Are you aware of any contamination risks (old pipes, industry, agriculture) and how to test for them?
+                      </li>
+                      <li>
+                        <span class="checkmark">□</span>
+                        Can your household reduce water waste without compromising hygiene?
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="planner-card">
+                    <h4>Community & regional moves</h4>
+                    <ul class="checklist">
+                      <li>
+                        <span class="checkmark">□</span>
+                        Protect watersheds and upstream forests that regulate flows and filter water.
+                      </li>
+                      <li>
+                        <span class="checkmark">□</span>
+                        Support public water utilities being kept public, with strong transparency rules.
+                      </li>
+                      <li>
+                        <span class="checkmark">□</span>
+                        Promote rainwater harvesting where safe and legal, with attention to roof and air quality.</li>
+                      <li>
+                        <span class="checkmark">□</span>
+                        Integrate water considerations into housing, industry and agriculture decisions.</li>
+                      <li>
+                        <span class="checkmark">□</span>
+                        Include marginalized communities in decision-making about water access and pricing.</li>
+                    </ul>
+                  </div>
+                </div>
+                <p>
+                  The more people know their local water story — sources, rights, risks — the harder it becomes for neglect or privatization to quietly compromise it.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== HOUSEHOLD SOVEREIGNTY ===== -->
+
+      <section id="sec-household" aria-label="Household sovereignty dashboard">
+        <div class="section-inner">
+          <div class="section-header">
+            <h2 class="section-title">
+              <span class="section-title-label">06 · Sovereign Families</span>
+              A simple household dashboard: where are you already strong, and where can you grow?
+            </h2>
+            <div class="section-tag">Practical dashboard</div>
+          </div>
+          <div class="section-body">
+            <p>
+              Use this as a gentle self-assessment. It is not a test; it is a map. You can print it, talk through it with family or friends, and revisit it every few months.
+            </p>
+            <div class="planner-grid">
+              <div class="planner-card">
+                <h4>Food sovereignty snapshot</h4>
+                <ul class="checklist">
+                  <li>
+                    <span class="checkmark" data-check="food-store">□</span>
+                    We maintain a rotating stock of food we actually eat (dry + canned + frozen) for at least <em>X</em> days.
+                  </li>
+                  <li>
+                    <span class="checkmark" data-check="food-grow">□</span>
+                    At least one person in our household knows how to grow some food (even in containers or small plots).
+                  </li>
+                  <li>
+                    <span class="checkmark" data-check="food-local">□</span>
+                    We have at least one regular source of food that is grown or produced within our region.
+                  </li>
+                  <li>
+                    <span class="checkmark" data-check="food-community">□</span>
+                    We are connected to at least one community food initiative (garden, co-op, mutual aid, etc.).
+                  </li>
+                </ul>
+              </div>
+              <div class="planner-card">
+                <h4>Water & health snapshot</h4>
+                <ul class="checklist">
+                  <li>
+                    <span class="checkmark" data-check="water-source">□</span>
+                    We know where our household water comes from and who manages it.
+                  </li>
+                  <li>
+                    <span class="checkmark" data-check="water-backup">□</span>
+                    We have a small emergency water reserve and at least one way to make additional water safer to drink.
+                  </li>
+                  <li>
+                    <span class="checkmark" data-check="water-risk">□</span>
+                    We know any local contamination risks and how to stay informed about them.
+                  </li>
+                  <li>
+                    <span class="checkmark" data-check="health-hygiene">□</span>
+                    Our household understands basic infection control (ventilation, handwashing, staying home when ill).
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="planner-grid" style="margin-top:12px;">
+              <div class="planner-card">
+                <h4>Digital & narrative hygiene</h4>
+                <ul class="checklist">
+                  <li>
+                    <span class="checkmark" data-check="digital-backup">□</span>
+                    Important documents and memories are backed up in at least two locations (one offline if possible).
+                  </li>
+                  <li>
+                    <span class="checkmark" data-check="digital-alt">□</span>
+                    We have a backup way to contact key people if major apps go down.
+                  </li>
+                  <li>
+                    <span class="checkmark" data-check="digital-literacy">□</span>
+                    At least one adult and one young person in our household can explain how recommendation algorithms work.
+                  </li>
+                  <li>
+                    <span class="checkmark" data-check="digital-boundaries">□</span>
+                    We have some shared boundaries about screen time and doom-scrolling, especially before sleep.
+                  </li>
+                </ul>
+              </div>
+              <div class="planner-card">
+                <h4>Community & governance</h4>
+                <ul class="checklist">
+                  <li>
+                    <span class="checkmark" data-check="community-names">□</span>
+                    We know the names of at least three neighbours we could call in an emergency.
+                  </li>
+                  <li>
+                    <span class="checkmark" data-check="community-groups">□</span>
+                    Someone in our household participates in a community group related to food, water, health or local governance.
+                  </li>
+                  <li>
+                    <span class="checkmark" data-check="civic-voice">□</span>
+                    We know how to contact our local representatives or community leaders about issues that matter.
+                  </li>
+                  <li>
+                    <span class="checkmark" data-check="mutual-aid">□</span>
+                    We both give and receive help (materials, time, knowledge) within our community network.
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="callout ok" style="margin-top:12px;">
+              <div class="callout-label">Reading your own dashboard</div>
+              <p style="margin:4px 0 4px;">
+                If many boxes are unchecked, you are not failing — you are <strong>early to the work that almost everyone will need to do</strong>.
+                If you are already strong in some areas, consider gently mentoring others. Sovereignty grows faster when it is shared.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== PROGRESS & HOPE ===== -->
+
+      <section id="sec-progress" class="alt" aria-label="Signs of progress and collective action">
+        <div class="section-inner">
+          <div class="section-header">
+            <h2 class="section-title">
+              <span class="section-title-label">07 · Progress</span>
+              The dangers are real. So is the progress — especially when we take it personally.
+            </h2>
+            <div class="section-tag">Signals of hope</div>
+          </div>
+          <div class="section-body">
+            <div class="two-col">
+              <div>
+                <p>
+                  Global hunger remains stubbornly high, but there are also <strong>success stories</strong> where targeted action reduced undernourishment, improved school meals
+                  or strengthened small-scale farming.:contentReference[oaicite:17]{index=17} Cities are investing in green infrastructure that buffers floods and droughts. New
+                  multilateral talks on AI governance are bringing safety and human rights language into high-level agreements.:contentReference[oaicite:18]{index=18}
+                </p>
+                <p>
+                  In many places, Indigenous and local communities are defending water sources, reviving traditional seeds and knowledge, and insisting that development not
+                  come at the cost of ecosystems that sustain everyone.
+                </p>
+                <div class="callout ok">
+                  <div class="callout-label">What “success” looks like in this decade</div>
+                  <ul style="margin:4px 0 0 16px;">
+                    <li>Fewer people pushed into hunger and thirst by conflict or climate extremes.</li>
+                    <li>More households with basic buffers: food stores, safe water, backups for power and communication.</li>
+                    <li>Stronger regulations and independent audits for high-risk AI and biotech.</li>
+                    <li>Communities who can say “no” to projects that threaten their land, water and culture.</li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <p>
+                  Families are a hidden unit of planetary governance. When you decide to:
+                </p>
+                <ul style="margin-left:16px;">
+                  <li>Plant a tree that will fruit for decades,</li>
+                  <li>Learn how to repair and share, instead of just consume,</li>
+                  <li>Check in on neighbours during heat waves or storms,</li>
+                  <li>Teach children how to think critically about the stories their devices show them,</li>
+                </ul>
+                <p>
+                  you are quietly <strong>altering the probability distribution</strong> of future crises and responses.
+                </p>
+                <div class="callout">
+                  <div class="callout-label">From fear to responsibility</div>
+                  <p style="margin:4px 0 4px;">
+                    It is natural to feel fear reading about AI, synthetic biology, institutional capture, hunger and water scarcity together. The goal of this page is not to
+                    leave you there. Responsibility feels different from fear:
+                  </p>
+                  <ul style="margin:0 0 0 16px;">
+                    <li>Fear says: “It’s too big, nothing I do matters.”</li>
+                    <li>Responsibility says: “This is big, so I will focus on the part only I can do, with others.”</li>
+                    <li>Fear isolates; responsibility connects.</li>
+                  </ul>
+                  <p style="margin-top:4px;">
+                    Every step toward household food and water sovereignty is also a step toward a world where global systems can afford to calm down.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <p style="margin-top:10px;">
+              The risks in technology, biology and politics are serious. They are also <strong>malleable</strong>. The more we insist on systems that protect the right of every
+              family to eat and drink safely — and the more we embody that insistence in our own lives — the more we tilt the trajectory of this decade away from catastrophe
+              and toward a livable, dignified future.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <div class="footer-row">
+          <div class="footer-note">
+            <strong>Zero-harm & anti-inversion note:</strong>
+            This page is designed to <strong>reduce harm</strong>, not increase it. It does not offer instructions for violence, exploitation or domination. Any technologies
+            or strategies described here are meant to support justice, ecological restoration and the basic right of every person to food, water and dignity.
+          </div>
+          <div class="footer-tag-row">
+            <span class="footer-tag">Planetary risk · Household response</span>
+            <span class="footer-tag">Food & water sovereignty for every family</span>
+            <span class="footer-tag">Technology & biology in service of life</span>
+          </div>
+        </div>
+        <div>
+          This is a living briefing. You may copy, translate, adapt and expand it for community education, workshops and local planning — especially in ways that center
+          the voices of those most affected by hunger, thirst, conflict and climate stress.
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ================= JS ================= -->
+  <script>
+    (function () {
+      const SPLASH_KEY = "threshold_decade_skip_splash";
+      const body = document.body;
+      const splash = document.getElementById("splash");
+      const btnBegin = document.getElementById("splash-begin");
+      const btnSkipOnce = document.getElementById("splash-skip-once");
+      const btnAlways = document.getElementById("splash-always");
+
+      function hideSplash() {
+        if (!splash) return;
+        splash.classList.add("hidden");
+        body.classList.remove("splash-active");
+      }
+
+      function maybeSkipSplash() {
+        try {
+          if (localStorage.getItem(SPLASH_KEY) === "always") {
+            hideSplash();
+          }
+        } catch (e) {
+          // localStorage may be unavailable; ignore and show splash.
+        }
+      }
+
+      btnBegin && btnBegin.addEventListener("click", hideSplash);
+      btnSkipOnce && btnSkipOnce.addEventListener("click", hideSplash);
+      btnAlways && btnAlways.addEventListener("click", function () {
+        try {
+          localStorage.setItem(SPLASH_KEY, "always");
+        } catch (e) {}
+        hideSplash();
+      });
+
+      maybeSkipSplash();
+
+      // Smooth nav
+      const navLinks = document.querySelectorAll(".nav-link");
+      navLinks.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const targetId = btn.getAttribute("data-target");
+          const target = targetId && document.getElementById(targetId);
+          if (target) {
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        });
+      });
+
+      // Also support hero buttons with data-target
+      document.querySelectorAll("[data-target]").forEach((btn) => {
+        if (btn.classList.contains("nav-link")) return;
+        btn.addEventListener("click", () => {
+          const targetId = btn.getAttribute("data-target");
+          const target = targetId && document.getElementById(targetId);
+          if (target) {
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        });
+      });
+
+      // Update active nav link on scroll
+      const sectionIds = ["sec-overview", "sec-tech", "sec-bio", "sec-institutions", "sec-food", "sec-water", "sec-household", "sec-progress"];
+      const sectionMap = sectionIds
+        .map((id) => {
+          const el = document.getElementById(id);
+          return el ? { id, el } : null;
+        })
+        .filter(Boolean);
+
+      function onScroll() {
+        const scrollPos = window.scrollY || window.pageYOffset || 0;
+        const offset = 140;
+        let activeId = "sec-overview";
+        for (const { id, el } of sectionMap) {
+          if (el.offsetTop - offset <= scrollPos) {
+            activeId = id;
+          }
+        }
+        navLinks.forEach((btn) => {
+          const tid = btn.getAttribute("data-target");
+          btn.classList.toggle("active", tid === activeId);
+        });
+      }
+
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+
+      // Accordions
+      document.querySelectorAll(".accordion").forEach((acc) => {
+        acc.querySelectorAll(".accordion-item").forEach((item) => {
+          const header = item.querySelector(".accordion-header");
+          const body = item.querySelector(".accordion-body");
+          if (!header || !body) return;
+
+          header.addEventListener("click", () => {
+            const isOpen = header.classList.contains("open");
+            const inner = body.querySelector(".accordion-body-inner");
+            const fullHeight = inner ? inner.offsetHeight + 10 : 0;
+
+            if (isOpen) {
+              header.classList.remove("open");
+              body.style.maxHeight = "0px";
+            } else {
+              header.classList.add("open");
+              body.style.maxHeight = fullHeight + "px";
+            }
+          });
+        });
+      });
+
+      // Search
+      const searchBox = document.getElementById("search-box");
+      const searchClear = document.getElementById("search-clear");
+      let searchTimeout = null;
+
+      function clearHighlights() {
+        document.querySelectorAll(".search-hit").forEach((el) => {
+          el.classList.remove("search-hit");
+        });
+      }
+
+      function applySearch(query) {
+        clearHighlights();
+        if (!query || !query.trim()) {
+          searchClear && searchClear.classList.remove("visible");
+          return;
+        }
+        searchClear && searchClear.classList.add("visible");
+        const q = query.trim().toLowerCase();
+        const candidates = document.querySelectorAll("section p, section li, section h2, section h3, section h4");
+        let firstHit = null;
+
+        candidates.forEach((node) => {
+          const text = node.textContent || "";
+          if (text.toLowerCase().includes(q)) {
+            node.classList.add("search-hit");
+            if (!firstHit) firstHit = node;
+          }
+        });
+
+        if (firstHit) {
+          firstHit.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }
+
+      if (searchBox) {
+        searchBox.addEventListener("input", () => {
+          const value = searchBox.value;
+          if (searchTimeout) window.clearTimeout(searchTimeout);
+          searchTimeout = window.setTimeout(() => applySearch(value), 180);
+        });
+      }
+
+      if (searchClear) {
+        searchClear.addEventListener("click", () => {
+          if (searchBox) searchBox.value = "";
+          searchClear.classList.remove("visible");
+          clearHighlights();
+        });
+      }
+
+      // Allow household checks to be toggled visually (local, not stored)
+      document.querySelectorAll(".checkmark[data-check]").forEach((box) => {
+        box.addEventListener("click", () => {
+          const done = box.classList.toggle("done");
+          box.textContent = done ? "✓" : "□";
+        });
+      });
+    })();
+  </script>
+
+  <!--
+    This file is intentionally self-contained. No telemetry. No hidden calls.
+    You are free to save, remix, print, and deploy it in any context aligned with
+    protecting life, reducing harm, and expanding food & water sovereignty.
+  -->
+</body>
+</html>
